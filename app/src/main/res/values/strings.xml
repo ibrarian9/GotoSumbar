@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">GotoSumbar</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="lokasi_loading">Lokasi Loading...</string>
+    <string name="loading">Loading...</string>
+    <string name="_5">5.0</string>
+    <string name="description">Description</string>
+    <string name="like">Like</string>
+    <string name="name_loading">Name Loading...</string>
+</resources>

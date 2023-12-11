@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "602532177074",
+    "firebase_url": "https://gotosumbar-default-rtdb.firebaseio.com",
+    "project_id": "gotosumbar",
+    "storage_bucket": "gotosumbar.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:602532177074:android:98d8cec81292f8412315ab",
+        "android_client_info": {
+          "package_name": "com.app.gotosumbar"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCFMQnHIj44vfVkRHv5TjdM-Cu080_NiJE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
