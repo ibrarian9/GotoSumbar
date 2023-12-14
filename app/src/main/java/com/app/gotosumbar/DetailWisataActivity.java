@@ -38,12 +38,11 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class DetailWisataActivity extends AppCompatActivity {
 
     ImageView poto, like, send;
-    TextView nama, lokasi, rating, nameData, desc;
+    TextView nama, lokasi, rating;
     RatingBar rateBar;
     EditText edKomen;
     BottomNavigationView navbar;
@@ -84,7 +83,6 @@ public class DetailWisataActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail_wisata);
 
         //  define id
-        nameData = findViewById(R.id.desc);
         btnBack = findViewById(R.id.BtnBack);
         nama = findViewById(R.id.tvNamaDetail);
         lokasi = findViewById(R.id.tvLocDetail);
@@ -95,7 +93,6 @@ public class DetailWisataActivity extends AppCompatActivity {
         like = findViewById(R.id.like);
         edKomen = findViewById(R.id.edKomen);
         send = findViewById(R.id.send);
-        desc = findViewById(R.id.desc);
 
         //  Get Data from Intent
         int dataId = getIntent().getIntExtra("id", 1);
