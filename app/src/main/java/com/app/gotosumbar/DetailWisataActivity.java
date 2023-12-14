@@ -106,6 +106,7 @@ public class DetailWisataActivity extends AppCompatActivity {
         nama.setText(dataNama);
         rating.setText(String.valueOf(dataRate));
         rateBar.setRating(dataRate);
+
         //  Set Data Poto
         if (urlPoto == null || urlPoto.isEmpty()) {
             Picasso.get().load(R.drawable.no_image).fit().into(poto);

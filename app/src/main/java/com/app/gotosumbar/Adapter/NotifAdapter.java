@@ -61,6 +61,7 @@ public class NotifAdapter extends RecyclerView.Adapter<NotifAdapter.MyViewHolder
 
         h.itemView.setOnClickListener(v -> {
             Intent i = new Intent(context, DetailWisataActivity.class);
+            i.putExtra("id", data.getId());
             i.putExtra("poto", data.getFoto());
             i.putExtra("nama", data.getNama());
             i.putExtra("ket", data.getKet());
