@@ -85,6 +85,7 @@ public class WisataAdapter extends RecyclerView.Adapter<WisataAdapter.MyViewHold
 
         holder.itemView.setOnClickListener(v -> {
             Intent i = new Intent(context, DetailWisataActivity.class);
+            i.putExtra("id", wisata.getId());
             i.putExtra("poto", wisata.getFoto());
             i.putExtra("nama", wisata.getNama());
             i.putExtra("ket", wisata.getKet());

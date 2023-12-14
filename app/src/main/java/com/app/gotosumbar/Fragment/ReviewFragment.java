@@ -1,14 +1,27 @@
 package com.app.gotosumbar.Fragment;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.app.gotosumbar.Adapter.KomenAdapter;
+import com.app.gotosumbar.Model.Komen;
 import com.app.gotosumbar.R;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -60,7 +73,34 @@ public class ReviewFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.fragment_review, container, false);
+        ArrayList<Komen> list = new ArrayList<>();
+        KomenAdapter komen = new KomenAdapter(getContext(), list);
+        RecyclerView rv = v.findViewById(R.id.rvKomen);
+        rv.setAdapter(komen);
+        rv.setLayoutManager(new LinearLayoutManager(getContext()));
+        int id = getActivity().getIntent().getExtras().getInt("id", 1);
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Wisata").child(String.valueOf(id)).child("komen");
+        ValueEventListener value = new ValueEventListener() {
+            @SuppressLint("NotifyDataSetChanged")
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                komen.clear();
+
+                for (DataSnapshot snapshot1 : snapshot.getChildren()){
+                    Komen komen1 = snapshot1.getValue(Komen.class);
+                    list.add(komen1);
+                }
+                komen.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+        ref.addValueEventListener(value);
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_review, container, false);
+        return v;
     }
 }

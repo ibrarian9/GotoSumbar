@@ -1,5 +1,6 @@
 package com.app.gotosumbar;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -15,22 +16,41 @@ import android.app.NotificationManager;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.app.gotosumbar.Fragment.AboutFragment;
 import com.app.gotosumbar.Fragment.ReviewFragment;
+import com.app.gotosumbar.Model.Komen;
+import com.app.gotosumbar.Model.UserDetail;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class DetailWisataActivity extends AppCompatActivity {
 
-    ImageView poto;
-    TextView nama, lokasi, rating, like;
+    ImageView poto, like, send;
+    TextView nama, lokasi, rating, nameData, desc;
     RatingBar rateBar;
+    EditText edKomen;
     BottomNavigationView navbar;
+    FloatingActionButton btnBack;
+    FirebaseUser user;
+    FirebaseAuth mAuth;
+    String name;
 
     @Override
     protected void onStart() {
@@ -64,16 +84,21 @@ public class DetailWisataActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail_wisata);
 
         //  define id
-        FloatingActionButton btnBack = findViewById(R.id.BtnBack);
+        nameData = findViewById(R.id.desc);
+        btnBack = findViewById(R.id.BtnBack);
         nama = findViewById(R.id.tvNamaDetail);
         lokasi = findViewById(R.id.tvLocDetail);
         poto = findViewById(R.id.imageView);
         rating = findViewById(R.id.tvRating);
         navbar = findViewById(R.id.navbar);
         rateBar = findViewById(R.id.rate);
-        like = findViewById(R.id.tvLike);
+        like = findViewById(R.id.like);
+        edKomen = findViewById(R.id.edKomen);
+        send = findViewById(R.id.send);
+        desc = findViewById(R.id.desc);
 
         //  Get Data from Intent
+        int dataId = getIntent().getIntExtra("id", 1);
         String urlPoto = getIntent().getStringExtra("poto");
         String dataNama = getIntent().getStringExtra("nama");
         String dataLok = getIntent().getStringExtra("loc");
@@ -98,6 +123,91 @@ public class DetailWisataActivity extends AppCompatActivity {
             lokasi.setText(dataLok);
         }
 
+        //  Send Komen to database
+        send.setOnClickListener(v -> {
+            //  Komen
+            String dataKomen = edKomen.getText().toString();
+
+            if (dataKomen.isEmpty()){
+                Toast.makeText(this, "Komentar Kosong...", Toast.LENGTH_SHORT).show();
+            } else {
+                //   Get UserName
+                mAuth = FirebaseAuth.getInstance();
+                user = mAuth.getCurrentUser();
+                assert user != null;
+                String userId = user.getUid();
+
+                DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
+                reference.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @SuppressLint("SetTextI18n")
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        UserDetail uDetail = snapshot.getValue(UserDetail.class);
+                        if (uDetail != null){
+                            name = uDetail.getUserName();
+
+                            DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Wisata")
+                                                    .child(String.valueOf(dataId));
+                            ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    if (snapshot.hasChild("komen")){
+
+                                        Query query = ref.child("komen").limitToLast(1);
+                                        query.addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                for (DataSnapshot child: snapshot.getChildren()){
+                                                    String id = child.getKey();
+                                                    assert id != null;
+                                                    int data = Integer.parseInt(id) + 1;
+
+                                                    Komen komen = new Komen(dataKomen, name);
+
+                                                    ref.child("komen").child(String.valueOf(data)).setValue(komen).addOnCompleteListener(task -> {
+                                                        if (task.isSuccessful()) {
+                                                            Toast.makeText(DetailWisataActivity.this, "Komen Berhasil", Toast.LENGTH_SHORT).show();
+                                                        } else {
+                                                            Toast.makeText(DetailWisataActivity.this, "Komen Tidak Berhasil", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    });
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError error) {
+
+                                            }
+                                        });
+                                    } else {
+                                        Komen komen = new Komen(dataKomen, name);
+                                        ref.child("komen").child("1").setValue(komen).addOnCompleteListener(task -> {
+                                            if (task.isSuccessful()){
+                                                Toast.makeText(DetailWisataActivity.this, "Komen Berhasil", Toast.LENGTH_SHORT).show();
+                                            } else {
+                                                Toast.makeText(DetailWisataActivity.this, "Komen Tidak Berhasil", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                }
+                            });
+
+                        }
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+                edKomen.getText().clear();
+            }
+        });
+
         like.setOnClickListener(v -> {
             //  Register Notification Channel
             NotificationChannel channel = new NotificationChannel("Test", "App gotoSumbar", NotificationManager.IMPORTANCE_HIGH);
@@ -108,7 +218,7 @@ public class DetailWisataActivity extends AppCompatActivity {
             //  Set Content Notification
             NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "Test")
                     .setContentTitle("App gotoSumbar")
-                    .setContentText("Anda berhasil memberikan Like...")
+                    .setContentText("Anda berhasil memberikan Like " + dataNama)
                     .setSmallIcon(R.drawable.baseline_notif_24)
                     .setPriority(NotificationCompat.PRIORITY_HIGH)
                     .setAutoCancel(true);

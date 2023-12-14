@@ -20,84 +20,84 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:layout_centerInParent="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
             android:orientation="vertical">
 
             <TextView
-                android:layout_marginBottom="40dp"
-                android:layout_gravity="center_horizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Welcome back!"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="40dp"
                 android:fontFamily="@font/inter_bold"
+                android:text="Welcome back!"
+                android:textColor="@color/white"
                 android:textFontWeight="700"
-                android:textSize="31sp"
-                android:textColor="@color/white" />
+                android:textSize="31sp" />
 
             <EditText
                 android:id="@+id/edEmailLogin"
-                android:background="@drawable/bg_white"
-                android:layout_marginStart="40dp"
-                android:layout_marginEnd="40dp"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
+                android:layout_marginStart="40dp"
+                android:layout_marginEnd="40dp"
+                android:background="@drawable/bg_white"
+                android:drawableStart="@drawable/baseline_person_24"
                 android:drawablePadding="10dp"
                 android:hint="e-mail"
                 android:inputType="textEmailAddress"
-                android:textColorHint="@color/hint"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"
-                android:drawableStart="@drawable/baseline_person_24"
-                android:textColor="@color/black" />
+                android:textColor="@color/black"
+                android:textColorHint="@color/hint" />
 
             <EditText
                 android:id="@+id/edPassLogin"
-                android:background="@drawable/bg_white"
-                android:layout_marginStart="40dp"
-                android:layout_marginEnd="40dp"
-                android:layout_marginTop="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="40dp"
+                android:background="@drawable/bg_white"
+                android:drawableStart="@drawable/baseline_lock_24"
                 android:drawablePadding="10dp"
                 android:hint="Password"
-                android:textColorHint="@color/hint"
                 android:inputType="textPassword"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"
-                android:drawableStart="@drawable/baseline_lock_24"
-                android:textColor="@color/black" />
+                android:textColor="@color/black"
+                android:textColorHint="@color/hint" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Forget Password?"
-                android:textColor="@color/white"
+                android:layout_gravity="end"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="40dp"
-                android:layout_gravity="end" />
+                android:text="Forget Password?"
+                android:textColor="@color/white" />
 
             <ProgressBar
                 android:id="@+id/pbLogin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginTop="20dp"
-                android:visibility="gone"
                 android:indeterminate="true"
-                android:indeterminateTintMode="src_atop"
                 android:indeterminateTint="@color/black"
-                android:layout_gravity="center" />
+                android:indeterminateTintMode="src_atop"
+                android:visibility="gone" />
 
             <RelativeLayout
                 android:id="@+id/rlLogin"
                 android:layout_width="match_parent"
                 android:layout_height="64dp"
-                android:background="@drawable/bg_grey"
                 android:layout_marginStart="80dp"
-                android:layout_marginEnd="80dp"
                 android:layout_marginTop="20dp"
-                android:layout_marginBottom="10dp">
+                android:layout_marginEnd="80dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/bg_grey">
 
                 <TextView
                     android:layout_width="wrap_content"

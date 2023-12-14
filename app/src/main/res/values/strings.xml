@@ -8,4 +8,7 @@
     <string name="description">Description</string>
     <string name="like">Like</string>
     <string name="name_loading">Name Loading...</string>
+    <string name="komen">Komentar</string>
+    <string name="desc">Deskripsi</string>
+    <string name="ketikkan_komentar">Ketikkan Komentar...</string>
 </resources>

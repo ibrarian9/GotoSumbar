@@ -3,20 +3,39 @@ package com.app.gotosumbar.Model;
 
 public class TempatWisata {
 
-	private String kategori, ket, nama, foto, lokasi;
+	private int id;
+	private String kategori, ket, nama, foto, lokasi, komem;
 	private Float rate;
 
 	public TempatWisata(){
 
 	}
 
-	public TempatWisata(String kategori, String ket, String nama, String foto, String lokasi, Float rate) {
+	public TempatWisata(int id, String kategori, String ket, String nama, String foto, String lokasi, String komem, Float rate) {
+		this.id = id;
 		this.kategori = kategori;
 		this.ket = ket;
 		this.nama = nama;
 		this.foto = foto;
 		this.lokasi = lokasi;
+		this.komem = komem;
 		this.rate = rate;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getKomem() {
+		return komem;
+	}
+
+	public void setKomem(String komem) {
+		this.komem = komem;
 	}
 
 	public String getKategori() {

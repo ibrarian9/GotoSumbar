@@ -63,7 +63,6 @@ public class AboutFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_about, container, false);
         String ket = getActivity().getIntent().getExtras().getString("ket");
-
         TextView tv = v.findViewById(R.id.tvAbout);
         tv.setText(ket);
         // Inflate the layout for this fragment
