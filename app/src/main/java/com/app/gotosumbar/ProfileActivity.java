@@ -59,8 +59,10 @@ public class ProfileActivity extends AppCompatActivity {
         logout.setOnClickListener(v -> {
             dialog.setContentView(R.layout.dialog_logout);
             dialog.setCancelable(false);
-            dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            if (dialog.getWindow() != null){
+                dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            }
 
             TextView no = dialog.findViewById(R.id.no);
             no.setOnClickListener( v1 -> dialog.dismiss());
