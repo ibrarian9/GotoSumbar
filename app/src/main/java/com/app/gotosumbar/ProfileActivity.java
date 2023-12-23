@@ -4,8 +4,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.app.gotosumbar.Model.UserDetail;
@@ -22,7 +26,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     FirebaseAuth mAuth;
     FirebaseUser user;
-    TextView logout, nama, hape;
+    TextView logout, nama, hape, faq, about, report;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +36,13 @@ public class ProfileActivity extends AppCompatActivity {
         logout = findViewById(R.id.tvLogout);
         nama = findViewById(R.id.nama);
         hape = findViewById(R.id.tvHape);
+        faq = findViewById(R.id.faq);
+        about = findViewById(R.id.about);
+        report = findViewById(R.id.report);
+
+        faq.setOnClickListener( v -> startActivity(new Intent(this, FaqActivity.class)));
+        about.setOnClickListener( v -> startActivity(new Intent(this, AboutActivity.class)));
+        report.setOnClickListener( v -> startActivity(new Intent(this, ReportActivity.class)));
 
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
@@ -44,12 +55,26 @@ public class ProfileActivity extends AppCompatActivity {
             showUserProfile(user);
         }
 
+        Dialog dialog = new Dialog(this);
         logout.setOnClickListener(v -> {
-            mAuth.signOut();
-            Intent i = new Intent(ProfileActivity.this, MainActivity.class);
-            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK );
-            startActivity(i);
-            finish();
+            dialog.setContentView(R.layout.dialog_logout);
+            dialog.setCancelable(false);
+            dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+            TextView no = dialog.findViewById(R.id.no);
+            no.setOnClickListener( v1 -> dialog.dismiss());
+
+            TextView yes = dialog.findViewById(R.id.yes);
+            yes.setOnClickListener( v2 -> {
+                mAuth.signOut();
+                Intent i = new Intent(ProfileActivity.this, MainActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK );
+                startActivity(i);
+                finish();
+                dialog.dismiss();
+            });
+            dialog.show();
         });
 
         BottomNavigationView navbar = findViewById(R.id.botNavbar);

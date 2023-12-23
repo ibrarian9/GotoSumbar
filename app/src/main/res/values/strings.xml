@@ -11,4 +11,8 @@
     <string name="komen">Komentar</string>
     <string name="desc">Deskripsi</string>
     <string name="ketikkan_komentar">Ketikkan Komentar...</string>
+    <string name="about">Selamat datang di GoToSumbar, aplikasi terdepan untuk merencanakan perjalanan wisata di Sumatra Barat. Kami mempersembahkan pengalaman eksplorasi yang tak terlupakan dengan berbagai fitur unggulan. Temukan destinasi wisata yang cocok dengan preferensi Anda melalui fitur pencarian canggih, tandai tempat favorit Anda, dan pantau statistik perjalanan langsung dari dashboard utama. Dapatkan informasi mendalam tentang setiap tempat wisata, nikmati notifikasi terkini, dan jelajahi berbagai kategori wisata sesuai minat Anda. Di samping itu, FAQ lengkap kami memberikan jawaban atas pertanyaan umum Anda, dan fitur pengaturan memungkinkan Anda menyesuaikan pengalaman Anda. GoToSumbar tidak hanya membantu merencanakan perjalanan Anda, tetapi juga menyediakan tips wisata menarik, riwayat kunjungan, dan dukungan bantuan langsung. Menjadikan setiap petualangan di Sumatra Barat lebih berkesan, unduh sekarang dan mulai menjelajahi!</string>
+    <string name="report">Report technical problem</string>
+    <string name="hint">Briefly explain what happened or what’s not working.</string>
+    <string name="data1">This app is designed to provide users with travel recommendations in West Sumatra based on their preferences. Learn more about its features and purpose in the \'About\' section.</string>
 </resources>

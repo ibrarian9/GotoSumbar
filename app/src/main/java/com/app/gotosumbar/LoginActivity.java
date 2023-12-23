@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -20,6 +21,7 @@ public class LoginActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
     EditText edEmail, edPass;
     String email, pass;
+    TextView forget;
     ProgressBar pb;
 
     @Override
@@ -45,6 +47,9 @@ public class LoginActivity extends AppCompatActivity {
         edPass = findViewById(R.id.edPassLogin);
         pb = findViewById(R.id.pbLogin);
         login = findViewById(R.id.rlLogin);
+        forget = findViewById(R.id.forgetPass);
+
+        forget.setOnClickListener( view -> startActivity(new Intent(this, ForgetPasswordActivity.class)));
 
         login.setOnClickListener(v -> {
            email = String.valueOf(edEmail.getText());

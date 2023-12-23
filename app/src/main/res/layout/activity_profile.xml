@@ -59,7 +59,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/tvAkun"
+            android:id="@+id/faq"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_marginStart="30dp"
@@ -69,7 +69,7 @@
             android:gravity="center_vertical"
             android:paddingStart="20dp"
             android:paddingEnd="20dp"
-            android:text="Account Settings"
+            android:text="FAQ"
             android:textColor="@color/black"
             android:textColorHint="@color/hint"
             android:drawablePadding="10dp"
@@ -79,6 +79,7 @@
             app:drawableStartCompat="@drawable/baseline_person_24" />
 
         <TextView
+            android:id="@+id/about"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_marginStart="30dp"
@@ -88,7 +89,7 @@
             android:gravity="center_vertical"
             android:paddingStart="20dp"
             android:paddingEnd="20dp"
-            android:text="Saved Trip"
+            android:text="About"
             android:textColor="@color/black"
             android:textColorHint="@color/hint"
             android:drawablePadding="10dp"
@@ -98,6 +99,7 @@
             app:drawableStartCompat="@drawable/file_chart_icon" />
 
         <TextView
+            android:id="@+id/report"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_marginStart="30dp"
@@ -108,7 +110,7 @@
             android:paddingStart="20dp"
             android:paddingEnd="20dp"
             android:drawablePadding="10dp"
-            android:text="Report Problem"
+            android:text="Report"
             android:textColor="@color/black"
             android:textColorHint="@color/hint"
             android:textSize="18sp"
