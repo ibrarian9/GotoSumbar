@@ -18,6 +18,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.Objects;
+
 public class RegisterActivity extends AppCompatActivity {
 
     EditText ednama, edemail, edhape, edpass;
@@ -88,7 +90,7 @@ public class RegisterActivity extends AppCompatActivity {
                assert fUser != null;
                String uid = fUser.getUid();
 
-               UserDetail user = new UserDetail(uid, nama, email, hape);
+               UserDetail user = new UserDetail(uid, nama, email, hape, "");
 
                DatabaseReference db = FirebaseDatabase.getInstance().getReference("Users");
                db.child(fUser.getUid()).setValue(user).addOnCompleteListener(t -> {
@@ -105,7 +107,7 @@ public class RegisterActivity extends AppCompatActivity {
                });
            } else {
                try {
-                   throw task.getException();
+                   throw Objects.requireNonNull(task.getException());
                } catch (FirebaseAuthUserCollisionException e) {
                    edemail.setError("Email is Already registered");
                } catch (Exception e) {

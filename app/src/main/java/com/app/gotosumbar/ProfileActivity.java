@@ -31,20 +31,22 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.ByteArrayOutputStream;
+import java.util.Objects;
 
 public class ProfileActivity extends AppCompatActivity {
 
     FirebaseAuth mAuth;
     FirebaseUser user;
-    TextView logout, nama, hape, faq, about, report;
+    TextView logout, nama, hape, faq, about, report, darkMode, language;
     ImageView pp, camera, gallery;
-    Uri filePath;
+    Uri imageUri;
     ActivityResultLauncher<Intent> resultLauncherCamera, resultLauncherGallery;
     FirebaseStorage storage;
+    String uid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +55,6 @@ public class ProfileActivity extends AppCompatActivity {
 
         //  define Firebase Storage
         storage = FirebaseStorage.getInstance();
-        StorageReference sRef = storage.getReference();
 
         logout = findViewById(R.id.tvLogout);
         nama = findViewById(R.id.nama);
@@ -62,10 +63,14 @@ public class ProfileActivity extends AppCompatActivity {
         about = findViewById(R.id.about);
         report = findViewById(R.id.report);
         pp = findViewById(R.id.potoProfile);
+        darkMode = findViewById(R.id.darkMode);
+        language = findViewById(R.id.language);
 
         faq.setOnClickListener( v -> startActivity(new Intent(this, FaqActivity.class)));
         about.setOnClickListener( v -> startActivity(new Intent(this, AboutActivity.class)));
         report.setOnClickListener( v -> startActivity(new Intent(this, ReportActivity.class)));
+        darkMode.setOnClickListener( v -> startActivity(new Intent(this, darkModeActivity.class)));
+        language.setOnClickListener( v -> startActivity(new Intent(this, LanguageActivity.class)));
 
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
@@ -97,6 +102,7 @@ public class ProfileActivity extends AppCompatActivity {
                 Intent openGallery = new Intent(Intent.ACTION_PICK);
                 openGallery.setType("image/*");
                 resultLauncherGallery.launch(openGallery);
+                d.dismiss();
             });
             d.show();
         });
@@ -105,10 +111,13 @@ public class ProfileActivity extends AppCompatActivity {
                 new ActivityResultContracts.StartActivityForResult(), result -> {
                 if (result.getResultCode() == Activity.RESULT_OK){
                     Intent data = result.getData();
-                    if (data != null){
-                        Bitmap poto = (Bitmap) data.getExtras().get("data");
-                        System.out.println(poto);
-                        Picasso.get().load(poto.toString()).fit().into(pp);
+                    if (data != null) {
+                        Bundle ex = data.getExtras();
+                        if (ex != null){
+                            Bitmap bitmap = (Bitmap) ex.get("data");
+                            assert bitmap != null;
+                            uploadToFirebase(bitmap);
+                        }
                     } else {
                         Toast.makeText(this, "Data tidak ada...", Toast.LENGTH_SHORT).show();
                     }
@@ -119,9 +128,9 @@ public class ProfileActivity extends AppCompatActivity {
                 new ActivityResultContracts.StartActivityForResult(), result -> {
                     if (result.getResultCode() == Activity.RESULT_OK) {
                         Intent data = result.getData();
-                        if (data != null){
-                            filePath = data.getData();
-                            Picasso.get().load(filePath).fit().into(pp);
+                        if (data != null) {
+                            imageUri = data.getData();
+                            upToFirebase(imageUri);
                         } else {
                             Toast.makeText(this, "Data tidak ada...", Toast.LENGTH_SHORT).show();
                         }
@@ -179,10 +188,10 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void showUserProfile(FirebaseUser user) {
-        String userId = user.getUid();
+        uid = user.getUid();
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
-        reference.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+        reference.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
             @SuppressLint("SetTextI18n")
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -192,11 +201,64 @@ public class ProfileActivity extends AppCompatActivity {
                     String noHape = uDetail.getUserNoHp();
                     nama.setText(name);
                     hape.setText(noHape);
+                    if (uDetail.getUserImage() != null){
+                        Picasso.get().load(uDetail.getUserImage()).fit().into(pp);
+                    } else {
+                        Picasso.get().load(R.drawable.icon_akun).fit().into(pp);
+                    }
                 }
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
+            }
+        });
+    }
+    private void uploadToFirebase(Bitmap bitmap){
+        StorageReference fileRef = storage.getReference().child("image/" + uid);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+
+        UploadTask uploadTask = fileRef.putBytes(data);
+        uploadTask.continueWithTask(task -> {
+           if (!task.isSuccessful()){
+               throw Objects.requireNonNull(task.getException());
+           }
+            return fileRef.getDownloadUrl();
+        }).addOnCompleteListener(task1 -> {
+            if (task1.isSuccessful()){
+                Uri download = task1.getResult();
+
+                DatabaseReference database = FirebaseDatabase.getInstance().getReference("Users").child(uid);
+                database.child("userImage").setValue(download.toString()).addOnCompleteListener(task2 -> {
+                    if (task2.isSuccessful()) {
+                        Toast.makeText(this, "Foto berhasil di Upload...", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+    }
+
+    private void upToFirebase(Uri uri){
+        StorageReference fileRef = storage.getReference().child("image/" + uid);
+        UploadTask uploadImg = fileRef.putFile(uri);
+
+        uploadImg.continueWithTask(task -> {
+            if (!task.isSuccessful()) {
+                throw Objects.requireNonNull(task.getException());
+            }
+            return fileRef.getDownloadUrl();
+        }).addOnCompleteListener(task -> {
+            if (task.isSuccessful()){
+                Uri download = task.getResult();
+
+                DatabaseReference database = FirebaseDatabase.getInstance().getReference("Users").child(uid);
+                database.child("userImage").setValue(download.toString()).addOnCompleteListener(task1 -> {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(this, "Foto berhasil di Upload...", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
     }
