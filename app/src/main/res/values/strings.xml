@@ -15,4 +15,6 @@
     <string name="report">Report technical problem</string>
     <string name="hint">Briefly explain what happened or what’s not working.</string>
     <string name="data1">This app is designed to provide users with travel recommendations in West Sumatra based on their preferences. Learn more about its features and purpose in the \'About\' section.</string>
+    <string name="feedback">Give your best rating to our application</string>
+    <string name="reason">Give your best reasons for our application</string>
 </resources>

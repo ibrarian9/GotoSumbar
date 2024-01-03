@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.EditText;
+import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -19,28 +20,30 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class ReportActivity extends AppCompatActivity {
+public class FeedbackActivity extends AppCompatActivity {
 
-    EditText edReport;
-    RelativeLayout rlSend;
+    RatingBar ratingBar;
     FirebaseAuth mAuth;
     FirebaseUser user;
     BottomNavigationView navbar;
+    EditText edReport;
     long maxId = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_report);
-
-        edReport = findViewById(R.id.edReport);
-        rlSend = findViewById(R.id.send);
+        setContentView(R.layout.activity_feedback);
 
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
         assert user != null;
         String userId = user.getUid();
 
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Report").child(userId);
+        edReport = findViewById(R.id.edReport);
+        ratingBar = findViewById(R.id.rating);
+        RelativeLayout send = findViewById(R.id.send);
+
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Feedback").child(userId);
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -48,21 +51,24 @@ public class ReportActivity extends AppCompatActivity {
                     maxId = (snapshot.getChildrenCount());
                 }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
         });
 
-        rlSend.setOnClickListener(v -> {
+        send.setOnClickListener(v -> {
+            String rate = String.valueOf(ratingBar.getRating());
             String report = edReport.getText().toString();
 
             if (TextUtils.isEmpty(report)){
                 Toast.makeText(this, "Report belum diisi...", Toast.LENGTH_SHORT).show();
+            } else if (TextUtils.isEmpty(rate)) {
+                Toast.makeText(this, "Rating belum diisi...", Toast.LENGTH_SHORT).show();
             } else {
-                DatabaseReference db = FirebaseDatabase.getInstance().getReference("Report").child(userId);
-                db.child(String.valueOf(maxId + 1)).child("pesan").setValue(report).addOnCompleteListener(task -> {
+                DatabaseReference db = FirebaseDatabase.getInstance().getReference("Feedback").child(userId);
+                db.child(String.valueOf(maxId + 1)).child("rating").setValue(rate);
+                db.child(String.valueOf(maxId + 1)).child("feedback").setValue(report).addOnCompleteListener(task -> {
                     if (task.isSuccessful()){
                         Toast.makeText(this, "Terima Kasih telah memberikan kami masukan...", Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(this, HomeActivity.class));

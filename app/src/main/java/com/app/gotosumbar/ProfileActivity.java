@@ -41,7 +41,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     FirebaseAuth mAuth;
     FirebaseUser user;
-    TextView logout, nama, hape, faq, about, report, darkMode, language;
+    TextView logout, nama, hape, faq, about, report, darkMode, feedback;
     ImageView pp, camera, gallery;
     Uri imageUri;
     ActivityResultLauncher<Intent> resultLauncherCamera, resultLauncherGallery;
@@ -64,13 +64,13 @@ public class ProfileActivity extends AppCompatActivity {
         report = findViewById(R.id.report);
         pp = findViewById(R.id.potoProfile);
         darkMode = findViewById(R.id.darkMode);
-        language = findViewById(R.id.language);
+        feedback = findViewById(R.id.feedback);
 
         faq.setOnClickListener( v -> startActivity(new Intent(this, FaqActivity.class)));
         about.setOnClickListener( v -> startActivity(new Intent(this, AboutActivity.class)));
         report.setOnClickListener( v -> startActivity(new Intent(this, ReportActivity.class)));
         darkMode.setOnClickListener( v -> startActivity(new Intent(this, darkModeActivity.class)));
-        language.setOnClickListener( v -> startActivity(new Intent(this, LanguageActivity.class)));
+        feedback.setOnClickListener( v -> startActivity(new Intent(this, FeedbackActivity.class)));
 
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
@@ -113,7 +113,7 @@ public class ProfileActivity extends AppCompatActivity {
                     Intent data = result.getData();
                     if (data != null) {
                         Bundle ex = data.getExtras();
-                        if (ex != null){
+                        if (ex != null) {
                             Bitmap bitmap = (Bitmap) ex.get("data");
                             assert bitmap != null;
                             uploadToFirebase(bitmap);
