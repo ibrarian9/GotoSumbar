@@ -201,7 +201,7 @@ public class ProfileActivity extends AppCompatActivity {
                     String noHape = uDetail.getUserNoHp();
                     nama.setText(name);
                     hape.setText(noHape);
-                    if (uDetail.getUserImage() != null){
+                    if (uDetail.getUserImage() != null && !uDetail.getUserImage().isEmpty()){
                         Picasso.get().load(uDetail.getUserImage()).fit().into(pp);
                     } else {
                         Picasso.get().load(R.drawable.icon_akun).fit().into(pp);
