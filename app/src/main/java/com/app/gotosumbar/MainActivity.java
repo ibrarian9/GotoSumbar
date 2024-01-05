@@ -16,8 +16,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-
         signIn = findViewById(R.id.signIn);
         signIn.setOnClickListener( v -> startActivity(new Intent(this, LoginActivity.class)));
 

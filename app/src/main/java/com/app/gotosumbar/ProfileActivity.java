@@ -199,10 +199,17 @@ public class ProfileActivity extends AppCompatActivity {
                 if (uDetail != null){
                     String name = uDetail.getUserName();
                     String noHape = uDetail.getUserNoHp();
+                    String foto = uDetail.getUserImage();
                     nama.setText(name);
                     hape.setText(noHape);
-                    if (uDetail.getUserImage() != null && !uDetail.getUserImage().isEmpty()){
-                        Picasso.get().load(uDetail.getUserImage()).fit().into(pp);
+                    if (foto != null){
+                        if (!foto.isEmpty()){
+                            Picasso.get().load(foto).fit().into(pp);
+                        } else if (!foto.equals("")) {
+                            Picasso.get().load(foto).fit().into(pp);
+                        } else {
+                            Picasso.get().load(R.drawable.icon_akun).fit().into(pp);
+                        }
                     } else {
                         Picasso.get().load(R.drawable.icon_akun).fit().into(pp);
                     }
